@@ -103,7 +103,7 @@ endpoint-public-access  = true
 # ON-DEMAND NODE GROUP
 # ==========================================
 
-ondemand_instance_types = ["t3a.medium"]
+ondemand_instance_types = ["t3.micro"]
 
 desired_capacity_on_demand = "1"
 min_capacity_on_demand     = "1"
@@ -114,16 +114,11 @@ max_capacity_on_demand     = "1"
 # SPOT NODE GROUP
 # ==========================================
 
-spot_instance_types = [
-  "t3a.medium",
-  "t3.medium",
-  "t3a.large",
-  "t3.large"
-]
+spot_instance_types = ["t3.micro"]
 
-desired_capacity_spot = "1"
-min_capacity_spot     = "1"
-max_capacity_spot     = "2"
+desired_capacity_spot = "0"
+min_capacity_spot     = "0"
+max_capacity_spot     = "0"
 
 
 # ==========================================
