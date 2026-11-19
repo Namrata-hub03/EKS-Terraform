@@ -1,51 +1,145 @@
-variable "aws-region" {}
-variable "env" {}
-variable "cluster-name" {}
-variable "vpc-cidr-block" {}
-variable "vpc-name" {}
-variable "igw-name" {}
-variable "pub-subnet-count" {}
-variable "pub-cidr-block" {
-  type = list(string)
-}
-variable "pub-availability-zone" {
-  type = list(string)
-}
-variable "pub-sub-name" {}
-variable "pri-subnet-count" {}
-variable "pri-cidr-block" {
-  type = list(string)
-}
-variable "pri-availability-zone" {
-  type = list(string)
-}
-variable "pri-sub-name" {}
-variable "public-rt-name" {}
-variable "private-rt-name" {}
-variable "eip-name" {}
-variable "ngw-name" {}
-variable "eks-sg" {}
+# ==========================================
+# ENVIRONMENT
+# ==========================================
+
+env        = "dev"
+aws-region = "us-east-1"
 
 
-# EKS
-variable "is-eks-cluster-enabled" {}
-variable "cluster-version" {}
-variable "endpoint-private-access" {}
-variable "endpoint-public-access" {}
-variable "ondemand_instance_types" {
-  default = ["t3a.medium"]
-}
+# ==========================================
+# VPC
+# ==========================================
 
-variable "spot_instance_types" {}
-variable "desired_capacity_on_demand" {}
-variable "min_capacity_on_demand" {}
-variable "max_capacity_on_demand" {}
-variable "desired_capacity_spot" {}
-variable "min_capacity_spot" {}
-variable "max_capacity_spot" {}
-variable "addons" {
-  type = list(object({
-    name    = string
-    version = string
-  }))
-}
+vpc-cidr-block = "10.16.0.0/16"
+vpc-name       = "vpc"
+
+
+# ==========================================
+# INTERNET GATEWAY
+# ==========================================
+
+igw-name = "igw"
+
+
+# ==========================================
+# PUBLIC SUBNETS
+# ==========================================
+
+pub-subnet-count = 3
+
+pub-cidr-block = [
+  "10.16.0.0/20",
+  "10.16.16.0/20",
+  "10.16.32.0/20"
+]
+
+pub-availability-zone = [
+  "us-east-1a",
+  "us-east-1b",
+  "us-east-1c"
+]
+
+pub-sub-name = "subnet-public"
+
+
+# ==========================================
+# PRIVATE SUBNETS
+# ==========================================
+
+pri-subnet-count = 3
+
+pri-cidr-block = [
+  "10.16.128.0/20",
+  "10.16.144.0/20",
+  "10.16.160.0/20"
+]
+
+pri-availability-zone = [
+  "us-east-1a",
+  "us-east-1b",
+  "us-east-1c"
+]
+
+pri-sub-name = "subnet-private"
+
+
+# ==========================================
+# ROUTE TABLES
+# ==========================================
+
+public-rt-name  = "public-route-table"
+private-rt-name = "private-route-table"
+
+
+# ==========================================
+# NAT GATEWAY / ELASTIC IP
+# ==========================================
+
+eip-name = "elasticip-ngw"
+ngw-name = "ngw"
+
+
+# ==========================================
+# EKS SECURITY GROUP
+# ==========================================
+
+eks-sg = "eks-sg"
+
+
+# ==========================================
+# EKS CLUSTER
+# ==========================================
+
+is-eks-cluster-enabled = true
+
+cluster-version = "1.35"
+cluster-name    = "eks-cluster"
+
+endpoint-private-access = true
+endpoint-public-access  = true
+
+
+# ==========================================
+# ON-DEMAND NODE GROUP
+# ==========================================
+
+ondemand_instance_types = ["t3.micro"]
+
+desired_capacity_on_demand = "1"
+min_capacity_on_demand     = "1"
+max_capacity_on_demand     = "1"
+
+
+# ==========================================
+# SPOT NODE GROUP
+# ==========================================
+
+spot_instance_types = ["t3.micro"]
+
+desired_capacity_spot = "0"
+min_capacity_spot     = "0"
+max_capacity_spot     = "1"
+
+
+# ==========================================
+# EKS ADD-ONS
+# ==========================================
+
+addons = [
+  {
+    name    = "vpc-cni"
+    version = null
+  },
+  {
+    name    = "coredns"
+    version = null
+  },
+  {
+    name    = "kube-proxy"
+    version = null
+  },
+  {
+    name    = "aws-ebs-csi-driver"
+    version = null
+  }
+]
